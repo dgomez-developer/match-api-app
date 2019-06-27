@@ -3,28 +3,28 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/AddMatchScreen.dart';
-import 'package:match_api_app/User.dart'; // Add this line.
+import 'package:match_api_app/MatchModel.dart';
 
-class UsersListScreen extends StatefulWidget {
+class MatchesListScreen extends StatefulWidget {
   @override
-  createState() => _UsersListScreenState();
+  createState() => _MatchesListScreenState();
 }
 
-class _UsersListScreenState extends State {
-  var users = new List<User>();
+class _MatchesListScreenState extends State {
+  var match = new List<MatchModel>();
 
-  _getUsers() {
-    API.getUsers().then((response) {
+  _getMatches() {
+    API.getMatches().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
-        users = list.map((model) => User.fromJson(model)).toList();
+        match = list.map((model) => MatchModel.fromJson(model)).toList();
       });
     });
   }
 
   initState() {
     super.initState();
-    _getUsers();
+    _getMatches();
   }
 
   dispose() {
@@ -35,9 +35,18 @@ class _UsersListScreenState extends State {
   build(context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: match.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(users[index].name));
+          return ListTile(
+              title: Text(match[index].player1.name +
+                  "-" +
+                  match[index].player1.score.toString() +
+                  "\n" +
+                  "vs" +
+                  "\n" +
+                  match[index].player2.name +
+                  "-" +
+                  match[index].player2.score.toString()));
         },
       ),
       floatingActionButton: FloatingActionButton(
