@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:match_api_app/Home.dart';
 import 'package:match_api_app/UsersListScreen.dart'; // Add this line.
 import 'package:match_api_app/AppTabController.dart'; // Add this line.
 
@@ -15,6 +16,7 @@ class MatchApp extends StatelessWidget {
         ),
 //        home: RandomWords()
 //        home: UsersListScreen()
-        home: AppTabController.createTabController());
+//        home: AppTabController.createTabController());
+        home: Home());
   }
 }
