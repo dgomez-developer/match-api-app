@@ -12,9 +12,10 @@ class MatchesListScreen extends StatefulWidget {
 
 class _MatchesListScreenState extends State {
   var match = new List<MatchModel>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
-  _getMatches() {
-    API.getMatches().then((response) {
+  Future<Null> _getMatches() {
+    return API.getMatches().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         match = list.map((model) => MatchModel.fromJson(model)).toList();
@@ -34,21 +35,24 @@ class _MatchesListScreenState extends State {
   @override
   build(context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: match.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-              title: Text(match[index].player1.name +
-                  "-" +
-                  match[index].player1.score.toString() +
-                  "\n" +
-                  "vs" +
-                  "\n" +
-                  match[index].player2.name +
-                  "-" +
-                  match[index].player2.score.toString()));
-        },
-      ),
+      body: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          child: ListView.builder(
+            itemCount: match.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                  title: Text(match[index].player1.name +
+                      "-" +
+                      match[index].player1.score.toString() +
+                      "\n" +
+                      "vs" +
+                      "\n" +
+                      match[index].player2.name +
+                      "-" +
+                      match[index].player2.score.toString()));
+            },
+          ),
+          onRefresh: _getMatches),
       floatingActionButton: FloatingActionButton(
         onPressed: pushCreateMatch,
         child: Icon(Icons.add),
