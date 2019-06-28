@@ -12,7 +12,8 @@ class MatchesListScreen extends StatefulWidget {
 
 class _MatchesListScreenState extends State {
   var match = new List<MatchModel>();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   Future<Null> _getMatches() {
     return API.getMatches().then((response) {
@@ -41,15 +42,27 @@ class _MatchesListScreenState extends State {
             itemCount: match.length,
             itemBuilder: (context, index) {
               return ListTile(
-                  title: Text(match[index].player1.name +
-                      "-" +
-                      match[index].player1.score.toString() +
-                      "\n" +
-                      "vs" +
-                      "\n" +
-                      match[index].player2.name +
-                      "-" +
-                      match[index].player2.score.toString()));
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage:
+                          NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                    ),
+                    Text(match[index].player1.name),
+                    Text(match[index].player1.score.toString())
+                  ]),
+                  Column(children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage:
+                          NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                    ),
+                    Text(match[index].player2.name),
+                    Text(match[index].player2.score.toString())
+                  ])
+                ],
+              ));
             },
           ),
           onRefresh: _getMatches),
