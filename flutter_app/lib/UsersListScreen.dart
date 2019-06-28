@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/AddMatchScreen.dart';
+import 'package:match_api_app/AddPlayerScreen.dart';
 import 'package:match_api_app/User.dart'; // Add this line.
 
 class UsersListScreen extends StatefulWidget {
@@ -46,19 +47,19 @@ class _UsersListScreenState extends State {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: pushCreateMatch,
+        onPressed: pushCreateUser,
         child: Icon(Icons.add),
       ),
     );
   }
 
-  Route<dynamic> routeToCreateMatch() {
+  Route<dynamic> routeToCreatePlayer() {
     return MaterialPageRoute(builder: (BuildContext context) {
-      return AddMatchScreen();
+      return AddPlayerScreen();
     });
   }
 
-  void pushCreateMatch() {
-    Navigator.of(context).push(routeToCreateMatch());
+  void pushCreateUser() {
+    Navigator.of(context).push(routeToCreatePlayer());
   }
 }
