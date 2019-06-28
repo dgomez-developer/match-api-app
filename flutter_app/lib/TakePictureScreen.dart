@@ -4,8 +4,6 @@ import 'package:match_api_app/DisplayPictureScreen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-
-
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;

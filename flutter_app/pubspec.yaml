@@ -24,6 +24,7 @@ dependencies:
   image_picker: ^0.6.0+4
   camera: ^0.5.2+1
   path_provider: ^1.0.0
+  amazon_cognito_identity_dart: ^0.0.22
 
 dev_dependencies:
   flutter_test:
@@ -45,7 +46,8 @@ flutter:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
-
+  assets:
+    - auth/secrets.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 

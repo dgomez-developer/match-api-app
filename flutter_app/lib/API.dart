@@ -1,7 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:match_api_app/auth/Secret.dart';
+import 'package:path/path.dart' as path;
+import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:match_api_app/MatchModel.dart';
+import 'package:amazon_cognito_identity_dart/sig_v4.dart';
+import 'package:match_api_app/Policy.dart';
+
 
 const baseUrl = "https://jsonplaceholder.typicode.com";
 const localhostUrl = "http://localhost:5000";
@@ -30,5 +37,50 @@ class API {
     print("${response.statusCode}");
     print("${response.body}");
     return response;
+  }
+
+  static Future uploadImage(File image) async {
+
+    var secretLoader = SecretLoader(secretPath: "auth/secrets.json");
+    var secrets = await secretLoader.load();
+
+    var _accessKeyId = secrets.accessKey;
+    var _secretKeyId = secrets.secretKey;
+    var _region = secrets.region;
+    var _s3Endpoint = secrets.s3Endpoint;
+
+    final stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
+    final length = await image.length();
+
+    final uri = Uri.parse(_s3Endpoint);
+    final req = http.MultipartRequest("POST", uri);
+    final multipartFile = http.MultipartFile('file', stream, length,
+        filename: path.basename(image.path));
+
+    final policy = Policy.fromS3PresignedPost('match-api/profile.jpg',
+        secrets.s3Bucket, _accessKeyId, 15, length,
+        region: _region);
+    final key =
+    SigV4.calculateSigningKey(_secretKeyId, policy.datetime, _region, 's3');
+    final signature = SigV4.calculateSignature(key, policy.encode());
+
+    req.files.add(multipartFile);
+    req.fields['key'] = policy.key;
+    req.fields['acl'] = 'public-read';
+    req.fields['X-Amz-Credential'] = policy.credential;
+    req.fields['X-Amz-Algorithm'] = 'AWS4-HMAC-SHA256';
+    req.fields['X-Amz-Date'] = policy.datetime;
+    req.fields['Policy'] = policy.encode();
+    req.fields['X-Amz-Signature'] = signature;
+
+    try {
+      final res = await req.send();
+      await for (var value in res.stream.transform(utf8.decoder)) {
+        print(value);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
   }
 }
