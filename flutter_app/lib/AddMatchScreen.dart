@@ -15,7 +15,9 @@ class AddMatchScreenState extends State<AddMatchScreen> {
   final _formKey = GlobalKey<FormState>();
   final _screenKey = GlobalKey<ScaffoldState>();
   final _firstPlayerNameController = TextEditingController();
+  final _firstPlayerScoreController = TextEditingController();
   final _secondPlayerNameController = TextEditingController();
+  final _secondPlayerScoreController = TextEditingController();
 
 
   @override
@@ -41,15 +43,35 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                   },
                   controller: _firstPlayerNameController,
                 ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Enter score";
+                    }
+                    return null;
+                  },
+                  controller: _firstPlayerScoreController,
+                ),
                 Text("Second Player"),
                 TextFormField(
                   validator: (value) {
                     if (value.isEmpty) {
-                      return "Enter second player name";
+                      return "Enter name";
                     }
                     return null;
                   },
                   controller: _secondPlayerNameController,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Enter score";
+                    }
+                    return null;
+                  },
+                  controller: _secondPlayerScoreController,
                 ),
                 RaisedButton(
                   onPressed: () {
@@ -58,10 +80,13 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                       var match = MatchModel();
                       var player1 = Player();
                       player1.name = _firstPlayerNameController.text;
+                      player1.score = int.parse(_firstPlayerScoreController.text);
                       match.player1 = player1;
                       var player2 = Player();
-                      player2.name = _firstPlayerNameController.text;
+                      player2.name = _secondPlayerNameController.text;
+                      player2.score = int.parse(_secondPlayerScoreController.text);
                       match.player2 = player2;
+
                       API.createMatches(match).then((response) {
                           _screenKey.currentState.showSnackBar(
                               SnackBar(content: Text('Match created')));

@@ -13,6 +13,6 @@ class Player {
   }
 
   Map toJson() {
-    return {'name': name};
+    return {'name': name, 'score' : score};
   }
 }
