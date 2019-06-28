@@ -83,4 +83,9 @@ class API {
     }
 
   }
+
+  static Future deleteMatch(String id) async {
+    var url = localhostUrl + "/match/" + id;
+    return http.delete(url);
+  }
 }

@@ -41,28 +41,41 @@ class _MatchesListScreenState extends State {
           child: ListView.builder(
             itemCount: match.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage:
-                          NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                    ),
-                    Text(match[index].player1.name),
-                    Text(match[index].player1.score.toString())
-                  ]),
-                  Column(children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage:
-                          NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                    ),
-                    Text(match[index].player2.name),
-                    Text(match[index].player2.score.toString())
-                  ])
-                ],
-              ));
+              return Dismissible(
+                key: Key(match[index].id),
+                onDismissed: (direction) {
+                  API.deleteMatch(match[index].id).then((dynamic){
+                    setState(() {
+                      match.removeAt(index);
+                      Scaffold
+                          .of(context)
+                          .showSnackBar(SnackBar(content: Text("Deleted")));
+                    });
+                  });
+                  },
+                child: ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Column(children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage:
+                            NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                          ),
+                          Text(match[index].player1.name),
+                          Text(match[index].player1.score.toString())
+                        ]),
+                        Column(children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage:
+                            NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                          ),
+                          Text(match[index].player2.name),
+                          Text(match[index].player2.score.toString())
+                        ])
+                      ],
+                    )),
+              );
             },
           ),
           onRefresh: _getMatches),
