@@ -53,6 +53,7 @@ class _MatchesListScreenState extends State {
                     });
                   });
                   },
+                background: Container(color: Colors.red),
                 child: ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
