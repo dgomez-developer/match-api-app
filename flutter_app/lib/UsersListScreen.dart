@@ -37,7 +37,12 @@ class _UsersListScreenState extends State {
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(users[index].name));
+          return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+              ),
+              title: Text(users[index].name)
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
