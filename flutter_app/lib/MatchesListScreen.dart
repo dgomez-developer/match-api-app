@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/AddMatchScreen.dart';
 import 'package:match_api_app/MatchModel.dart';
+import 'package:match_api_app/Player.dart';
 
 class MatchesListScreen extends StatefulWidget {
   @override
@@ -74,21 +75,24 @@ class _MatchesListScreenState extends State {
                                 color: Colors.transparent,
                                 child: Align(
                                     alignment: Alignment.bottomCenter,
-                                    child:  ListTile(
-                                            title:
-                                             Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                                 Image.asset(
-                                                     "images/winner-cup.jpg",
-                                                     fit: BoxFit.fitWidth,
-                                                     width: match[index].player1.score > match[index].player2.score ? 50 : 0,
-                                                     height: match[index].player1.score > match[index].player2.score ? 50 : 0),
-                                             Container(
-                                             color: Colors.transparent,
-                                               child:
-                                            Column(children: <Widget>[
+                                    child: ListTile(
+                                        title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Image.asset("images/winner-cup.jpg",
+                                            fit: BoxFit.fitWidth,
+                                            width: match[index].player1.score >
+                                                    match[index].player2.score
+                                                ? 50
+                                                : 0,
+                                            height: match[index].player1.score >
+                                                    match[index].player2.score
+                                                ? 50
+                                                : 0),
+                                        Container(
+                                            color: Colors.transparent,
+                                            child: Column(children: <Widget>[
                                               CircleAvatar(
                                                 backgroundImage: NetworkImage(
                                                     "https://i.imgur.com/BoN9kdC.png"),
@@ -100,9 +104,8 @@ class _MatchesListScreenState extends State {
                                                   .toString())
                                             ])),
                                         Container(
-                                          color: Colors.transparent,
-                                          child:
-                                            Column(children: <Widget>[
+                                            color: Colors.transparent,
+                                            child: Column(children: <Widget>[
                                               CircleAvatar(
                                                 backgroundImage: NetworkImage(
                                                     "https://i.imgur.com/BoN9kdC.png"),
@@ -112,15 +115,19 @@ class _MatchesListScreenState extends State {
                                                   .player2
                                                   .score
                                                   .toString())
-
                                             ])),
-                                            Image.asset(
-                                                "images/winner-cup.jpg",
-                                                fit: BoxFit.fitWidth,
-                                                width: match[index].player2.score > match[index].player1.score ? 50 : 0,
-                                                height: match[index].player2.score > match[index].player1.score ? 50 : 0)
-                                          ],
-                                        ))))
+                                        Image.asset("images/winner-cup.jpg",
+                                            fit: BoxFit.fitWidth,
+                                            width: match[index].player2.score >
+                                                    match[index].player1.score
+                                                ? 50
+                                                : 0,
+                                            height: match[index].player2.score >
+                                                    match[index].player1.score
+                                                ? 50
+                                                : 0)
+                                      ],
+                                    ))))
                           ],
                         )
                       ])));
@@ -128,19 +135,25 @@ class _MatchesListScreenState extends State {
           ),
           onRefresh: _getMatches),
       floatingActionButton: FloatingActionButton(
-        onPressed: pushCreateMatch,
+        onPressed: getPlayersAndPush,
         child: Icon(Icons.add),
       ),
     );
   }
 
-  Route<dynamic> routeToCreateMatch() {
+  Route<dynamic> routeToCreateMatch(List<Player> players) {
     return MaterialPageRoute(builder: (BuildContext context) {
-      return AddMatchScreen();
+        return AddMatchScreen(players: players);
     });
   }
 
-  void pushCreateMatch() {
-    Navigator.of(context).push(routeToCreateMatch());
+  void getPlayersAndPush(){
+    API.getPlayers().then((players) {
+      pushCreateMatch(players);
+    });
+  }
+
+  void pushCreateMatch(List<Player> players) {
+    Navigator.of(context).push(routeToCreateMatch(players));
   }
 }
