@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/MatchModel.dart';
 import 'package:match_api_app/Player.dart';
+import 'package:flutter_picker/flutter_picker.dart';
+
 
 class AddMatchScreen extends StatefulWidget {
   @override
@@ -18,10 +20,20 @@ class AddMatchScreenState extends State<AddMatchScreen> {
   final _firstPlayerScoreController = TextEditingController();
   final _secondPlayerNameController = TextEditingController();
   final _secondPlayerScoreController = TextEditingController();
+  var _firstPlayer = Player();
+  List<Player> players = new List<Player>();
 
+  initState() {
+    super.initState();
+    _getPlayers();
+  }
+
+  dispose() {
+    super.dispose();
+  }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
 
     return Scaffold(
         key: _screenKey,
@@ -34,6 +46,35 @@ class AddMatchScreenState extends State<AddMatchScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text("First Player"),
+                new FormField(
+                  builder: (FormFieldState state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.person),
+                        labelText: 'First player',
+                      ),
+                      isEmpty: _firstPlayer.name == '',
+                      child: new DropdownButtonHideUnderline(
+                        child: new DropdownButton(
+                          value: _firstPlayer,
+                          isDense: true,
+                          onChanged: (Player newValue) {
+                            setState(() {
+                              _firstPlayer = newValue;
+                              state.didChange(newValue);
+                            });
+                          },
+                          items: players.map((Player value) {
+                            return new DropdownMenuItem(
+                              value: value,
+                              child: new Text(value.name),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 TextFormField(
                   validator: (value) {
                     if (value.isEmpty) {
@@ -100,4 +141,11 @@ class AddMatchScreenState extends State<AddMatchScreen> {
         )
     );
   }
+
+  void _getPlayers() {
+    API.getPlayers().then((players){
+      this.players = players;
+    });
+  }
+
 }

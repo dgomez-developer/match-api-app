@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:match_api_app/Player.dart';
+import 'package:match_api_app/User.dart';
 import 'package:match_api_app/auth/Secret.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
@@ -17,6 +19,14 @@ class API {
   static Future getUsers() {
     var url = baseUrl + "/users";
     return http.get(url);
+  }
+
+  static Future<List<Player>> getPlayers() async {
+    var url = baseUrl + "/users";
+    var response = await http.get(url);
+    Iterable list = json.decode(response.body);
+    var users = list.map((model) => User.fromJson(model)).toList();
+    return users.map((user) => Player(id:user.id.toString(), name:user.name)).toList();
   }
 
   static Future getMatches() {

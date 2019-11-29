@@ -22,6 +22,7 @@ dependencies:
   english_words: ^3.1.0
   http: ^0.12.0+2
   image_picker: ^0.6.0+4
+  flutter_picker: ^1.0.13
   camera: ^0.5.2+1
   path_provider: ^1.0.0
   amazon_cognito_identity_dart: ^0.0.22
@@ -48,6 +49,8 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - auth/secrets.json
+    - images/tennis-table-card-bg.jpg
+    - images/winner-cup.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
