@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:match_api_app/Home.dart';
-import 'package:match_api_app/UsersListScreen.dart'; // Add this line.
-import 'package:match_api_app/AppTabController.dart'; // Add this line.
 
 void main() => runApp(MatchApp());
 
@@ -14,9 +12,6 @@ class MatchApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-//        home: RandomWords()
-//        home: UsersListScreen()
-//        home: AppTabController.createTabController());
         home: Home());
   }
 }
