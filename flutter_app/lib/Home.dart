@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:match_api_app/ChinesePingPongScreen.dart';
 import 'package:match_api_app/MatchesListScreen.dart';
 import 'package:match_api_app/UsersListScreen.dart';
+import 'package:match_api_app/auth/Credentials.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     MatchesListScreen(),
     UsersListScreen(),
-    UsersListScreen()
+    ChinesePingPongScreen()
   ];
 
   @override
@@ -35,6 +37,28 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Match App"),
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.perm_identity),
+            tooltip: 'Login',
+            onPressed: () => {
+//          Credentials credentials = new Credentials(
+//          cognitoIdentityPoolId,
+//          cognitoUserPoolId,
+//          cognitoClientId,
+//          googleSignInAuthentication.idToken,
+//          'accounts.google.com',
+//          );
+//
+//          final api = Api(apiEndpointUrl, '/flutter', 'ap-southeast-2', credentials);
+//
+//          final result = await api.post({});
+//
+//          print(result.body);
+//
+          },
+          ),
+        ],
       ),
       body: _children[_currentIndex], // new
       bottomNavigationBar: BottomNavigationBar(

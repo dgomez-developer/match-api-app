@@ -98,4 +98,10 @@ class API {
     var url = localhostUrl + "/match/" + id;
     return http.delete(url);
   }
+
+  static Future addChinesePingPongPoint(Player player) async {
+    var url = localhostUrl + "/ranking/" + player.id;
+    var body = json.encode(player);
+    return http.put(url,body: body,headers: {"Content-Type": "application/json"});
+  }
 }
