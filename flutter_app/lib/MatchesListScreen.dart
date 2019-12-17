@@ -153,7 +153,19 @@ class _MatchesListScreenState extends State {
     });
   }
 
-  void pushCreateMatch(List<Player> players) {
-    Navigator.of(context).push(routeToCreateMatch(players));
+  void pushCreateMatch(List<Player> players) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => AddMatchScreen(players: players)),
+    );
+
+    if (result == true) {
+      this._getMatches();
+    }
+
+    //Navigator.of(context).push(routeToCreateMatch(players));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/MatchModel.dart';
 import 'package:match_api_app/Player.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddMatchScreen extends StatefulWidget {
   final List<Player> players;
@@ -15,9 +16,11 @@ class AddMatchScreen extends StatefulWidget {
 }
 
 class AddMatchScreenState extends State<AddMatchScreen> {
+
   final _screenKey = GlobalKey<ScaffoldState>();
   final _firstPlayerScoreController = TextEditingController();
   final _secondPlayerScoreController = TextEditingController();
+
   Player _secondPlayer;
   final List<Player> players;
   Player _firstPlayer;
@@ -36,6 +39,17 @@ class AddMatchScreenState extends State<AddMatchScreen> {
   }
 
   Color _textStyleColor = Colors.green;
+
+  void showToast({text: String}) {
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.blueAccent,
+        textColor: Colors.white
+    );
+  }
 
   @override
   build(BuildContext context) {
@@ -115,11 +129,9 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                 onPressed: () {
 
                   if(_firstPlayerScoreController.text.isEmpty && _secondPlayerScoreController.text.isEmpty) {
-                    _screenKey.currentState
-                        .showSnackBar(SnackBar(content: Text('no me seas gili')));
+                    this.showToast(text: 'score should not be empty');
                     return;
                   }
-
 
                   var player1Score = 0;
                   var player2Score = 0;
@@ -128,25 +140,29 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                     player1Score = int.parse(_firstPlayerScoreController.text);
                     player2Score = int.parse(_secondPlayerScoreController.text);
                   } catch (e) {
-                    _screenKey.currentState
-                        .showSnackBar(SnackBar(content: Text('score not valid')));
+                    showToast(text: 'invalid score');
                     return;
+                  }
+
+                  if (player1Score == player2Score) {
+                    showToast(text: 'There should be a winner. Draw is not allowed');
+                    return;
+
                   }
 
                     var match = MatchModel();
                     var player1 = Player();
                     player1.name = _firstPlayer.name;
-                    player1.score = int.parse(_firstPlayerScoreController.text);
+                    player1.score = player1Score;
                     match.player1 = player1;
                     var player2 = Player();
                     player2.name = _secondPlayer.name;
-                    player2.score = int.parse(_secondPlayerScoreController.text);
+                    player2.score = player2Score;
                     match.player2 = player2;
                     API.createMatches(match).then((response) {
-                      _screenKey.currentState
-                          .showSnackBar(SnackBar(content: Text('Match created')));
-
-
+                      Navigator.pop(context, true);
+                      //_screenKey.currentState
+                       //   .showSnackBar(SnackBar(content: Text('Match created')));
                     });
 
                 },
@@ -157,4 +173,6 @@ class AddMatchScreenState extends State<AddMatchScreen> {
           ]),
         ));
   }
+
+
 }
