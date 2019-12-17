@@ -161,8 +161,6 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                     match.player2 = player2;
                     API.createMatches(match).then((response) {
                       Navigator.pop(context, true);
-                      //_screenKey.currentState
-                       //   .showSnackBar(SnackBar(content: Text('Match created')));
                     });
 
                 },

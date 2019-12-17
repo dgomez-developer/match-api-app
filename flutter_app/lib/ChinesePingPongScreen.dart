@@ -37,25 +37,28 @@ class _ChinesePingPongScreenState extends State {
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
-          return Row(
+          return ListTile(title: Text(users[index].name), trailing: IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+//                  API.addChinesePingPongPoint(users[index]);
+            },
+          ),
+            leading: CircleAvatar(backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),),);
+         /* return Row(
             children: <Widget>[
               CircleAvatar(
                 backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
               ),
               Text(users[index].name),
               IconButton(
-                icon: Icon(Icons.add), 
+                icon: Icon(Icons.add),
                 onPressed: () {
 //                  API.addChinesePingPongPoint(users[index]);
                 },
               )
               ],
-          );
+          );*/
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: pushCreateUser,
-        child: Icon(Icons.add),
       ),
     );
   }

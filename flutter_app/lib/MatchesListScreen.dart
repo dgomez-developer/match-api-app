@@ -53,9 +53,8 @@ class _MatchesListScreenState extends State {
                       });
                     });
                   },
-                  background: Container(color: Colors.red),
                   child: Card(
-                      borderOnForeground: true,
+                      borderOnForeground: false,
                       elevation: 5,
                       child: Column(mainAxisSize: MainAxisSize.min, children: <
                           Widget>[
@@ -70,8 +69,8 @@ class _MatchesListScreenState extends State {
                                   child: Image.asset(
                                       "images/tennis-table-card-bg.jpg"),
                                 )),
-                            Material(
-                                elevation: 1.0,
+                            Container(
+                                //elevation: 1.0,
                                 color: Colors.transparent,
                                 child: Align(
                                     alignment: Alignment.bottomCenter,
@@ -127,7 +126,10 @@ class _MatchesListScreenState extends State {
                                                 ? 50
                                                 : 0)
                                       ],
-                                    ))))
+                                    )
+                                    )
+                                )
+                            )
                           ],
                         )
                       ])));
