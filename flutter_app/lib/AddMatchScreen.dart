@@ -35,6 +35,8 @@ class AddMatchScreenState extends State<AddMatchScreen> {
     super.dispose();
   }
 
+  Color _textStyleColor = Colors.green;
+
   @override
   build(BuildContext context) {
     return Scaffold(
@@ -42,79 +44,117 @@ class AddMatchScreenState extends State<AddMatchScreen> {
         appBar: AppBar(
           title: Text("Create Match"),
         ),
-        body: Column(children: <Widget>[
-          Text("First Player"),
-          DropdownButton(
-            hint: Text('Please choose a player'),
-            value: _firstPlayer,
-            onChanged: (Player newValue) {
-              _firstPlayer = newValue;
-              setState(() {});
-            },
-            items: players.map((player) {
-              return new DropdownMenuItem(
-                value: player,
-                child: new Text(player.name),
-              );
-            }).toList(),
-          ),
-          Row(
-            children: <Widget>[
-              Text("Score"),
-              new Flexible(
-                  child: TextField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                controller: _firstPlayerScoreController,
-              ))
-            ],
-          ),
-          Text("Second Player"),
-          DropdownButton(
-            value: _secondPlayer,
-            hint: Text('Please choose a player'),
-            onChanged: (Player newValue) {
-              _secondPlayer = newValue;
-              setState(() {});
-            },
-            items: players.map((player) {
-              return new DropdownMenuItem(
-                value: player,
-                child: new Text(player.name),
-              );
-            }).toList(),
-          ),
-          Row(
-            children: <Widget>[
-              Text("Score"),
-              new Flexible(
-                  child: TextField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                controller: _secondPlayerScoreController,
-              ))
-            ],
-          ),
-          RaisedButton(
-            onPressed: () {
+        body: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(children: <Widget>[
+            Text("First Player",
+              ),
+            DropdownButton(
+              hint: Text('Please choose a player'),
+              value: _firstPlayer,
+              onChanged: (Player newValue) {
+                _firstPlayer = newValue;
+                setState(() {});
+              },
+              items: players.map((player) {
+                return new DropdownMenuItem(
+                  value: player,
+                  child: new Text(player.name),
+                );
+              }).toList(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Text("Score: "),
+                  new Flexible(
+                      child: TextField(
+                    keyboardType: TextInputType.number,
+                    maxLines: 1,
+                    controller: _firstPlayerScoreController,
+                  ))
+                ],
+              ),
+            ),
+            Container(padding: const EdgeInsets.only(top: 36.0),
+              child: Column(children: <Widget>[
+              Text("Second Player"),
+              DropdownButton(
+                value: _secondPlayer,
+                hint: Text('Please choose a player'),
+                onChanged: (Player newValue) {
+                  _secondPlayer = newValue;
+                  setState(() {});
+                },
+                items: players.map((player) {
+                  return new DropdownMenuItem(
+                    value: player,
+                    child: new Text(player.name),
+                  );
+                }).toList(),
+              )
+            ],),),
 
-                var match = MatchModel();
-                var player1 = Player();
-                player1.name = _firstPlayer.name;
-                player1.score = int.parse(_firstPlayerScoreController.text);
-                match.player1 = player1;
-                var player2 = Player();
-                player2.name = _secondPlayer.name;
-                player2.score = int.parse(_secondPlayerScoreController.text);
-                match.player2 = player2;
-                API.createMatches(match).then((response) {
-                  _screenKey.currentState
-                      .showSnackBar(SnackBar(content: Text('Match created')));
-                });
+            Row(
+              children: <Widget>[
+                Text("Score: "),
+                new Flexible(
+                    child: TextField(
+                  keyboardType: TextInputType.number,
+                  maxLines: 1,
+                  controller: _secondPlayerScoreController,
+                ))
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: RaisedButton(elevation: 15,
+                textColor: Colors.white,
+                color: Colors.blueAccent,
+                onPressed: () {
 
-            },
-            child: Text("Create"),
-          )
-        ]));
+                  if(_firstPlayerScoreController.text.isEmpty && _secondPlayerScoreController.text.isEmpty) {
+                    _screenKey.currentState
+                        .showSnackBar(SnackBar(content: Text('no me seas gili')));
+                    return;
+                  }
+
+
+                  var player1Score = 0;
+                  var player2Score = 0;
+
+                  try {
+                    player1Score = int.parse(_firstPlayerScoreController.text);
+                    player2Score = int.parse(_secondPlayerScoreController.text);
+                  } catch (e) {
+                    _screenKey.currentState
+                        .showSnackBar(SnackBar(content: Text('score not valid')));
+                    return;
+                  }
+
+                    var match = MatchModel();
+                    var player1 = Player();
+                    player1.name = _firstPlayer.name;
+                    player1.score = int.parse(_firstPlayerScoreController.text);
+                    match.player1 = player1;
+                    var player2 = Player();
+                    player2.name = _secondPlayer.name;
+                    player2.score = int.parse(_secondPlayerScoreController.text);
+                    match.player2 = player2;
+                    API.createMatches(match).then((response) {
+                      _screenKey.currentState
+                          .showSnackBar(SnackBar(content: Text('Match created')));
+
+
+                    });
+
+                },
+                child: Text("Create",
+                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
+              ),
+            )
+          ]),
+        ));
   }
 }

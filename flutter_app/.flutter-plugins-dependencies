@@ -1,1 +1,1 @@
-{"_info":"// This is a generated file; do not edit or check into version control.","dependencyGraph":[{"name":"camera","dependencies":[]},{"name":"flutter_picker","dependencies":[]},{"name":"google_sign_in","dependencies":[]},{"name":"image_picker","dependencies":[]},{"name":"path_provider","dependencies":[]}]}
+{"_info":"// This is a generated file; do not edit or check into version control.","dependencyGraph":[{"name":"camera","dependencies":[]},{"name":"google_sign_in","dependencies":[]},{"name":"image_picker","dependencies":[]},{"name":"path_provider","dependencies":[]}]}
