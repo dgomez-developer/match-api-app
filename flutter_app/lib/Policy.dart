@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:amazon_cognito_identity_dart/sig_v4.dart';
+import 'auth/Cognito/sig_v4.dart';
 
 class Policy {
 

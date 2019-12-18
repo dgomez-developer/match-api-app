@@ -1,18 +1,22 @@
 import 'dart:async';
-import 'package:amazon_cognito_identity_dart/cognito.dart';
-import 'package:amazon_cognito_identity_dart/sig_v4.dart';
-import 'package:http/http.dart' as http;
+
+import 'Cognito/src/cognito_credentials.dart';
+import 'Cognito/src/cognito_user_pool.dart';
 
 class Credentials {
-  final CognitoCredentials _cognitoCredentials;
-  final String _token;
-  final String _authenticator;
+  CognitoCredentials _cognitoCredentials;
+  CognitoUserPool _cognitoUserPool;
+  String _token;
 
-  Credentials(String identityPoolId, String userPoolId, String clientId, this._token, [this._authenticator])
-      : _cognitoCredentials = new CognitoCredentials(identityPoolId, new CognitoUserPool(userPoolId, clientId));
+  Credentials(
+      String identityPoolId, String userPoolId, String clientId, this._token) {
+    _cognitoUserPool = new CognitoUserPool(userPoolId, clientId);
+    _cognitoCredentials =
+        new CognitoCredentials(identityPoolId, _cognitoUserPool);
+  }
 
   Future<CognitoCredentials> get cognitoCredentials async {
-    await _cognitoCredentials.getAwsCredentials(_token);
+    await _cognitoCredentials.getAwsCredentials(_token, 'accounts.google.com');
     return _cognitoCredentials;
   }
 }

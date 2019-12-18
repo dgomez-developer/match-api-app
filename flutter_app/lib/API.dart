@@ -8,8 +8,9 @@ import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:match_api_app/MatchModel.dart';
-import 'package:amazon_cognito_identity_dart/sig_v4.dart';
 import 'package:match_api_app/Policy.dart';
+
+import 'auth/Cognito/sig_v4.dart';
 
 
 const baseUrl = "https://jsonplaceholder.typicode.com";

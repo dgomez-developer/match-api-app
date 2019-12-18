@@ -3,6 +3,10 @@ import 'package:match_api_app/ChinesePingPongScreen.dart';
 import 'package:match_api_app/MatchesListScreen.dart';
 import 'package:match_api_app/UsersListScreen.dart';
 import 'package:match_api_app/auth/Credentials.dart';
+import 'package:match_api_app/auth/google.dart';
+
+import 'auth/LoginApi.dart';
+import 'auth/Secret.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -41,22 +45,7 @@ class _HomeState extends State<Home> {
           new IconButton(
             icon: new Icon(Icons.perm_identity),
             tooltip: 'Login',
-            onPressed: () => {
-//          Credentials credentials = new Credentials(
-//          cognitoIdentityPoolId,
-//          cognitoUserPoolId,
-//          cognitoClientId,
-//          googleSignInAuthentication.idToken,
-//          'accounts.google.com',
-//          );
-//
-//          final api = Api(apiEndpointUrl, '/flutter', 'ap-southeast-2', credentials);
-//
-//          final result = await api.post({});
-//
-//          print(result.body);
-//
-          },
+            onPressed: () => doLogin(),
           ),
         ],
       ),
@@ -81,4 +70,28 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  doLogin() async {
+
+    var secretLoader = SecretLoader(secretPath: "auth/secrets.json");
+    var secrets = await secretLoader.load();
+    final googleSignInAuthentication = await signInWithGoogle();
+
+    print("ID_TOKEN: " + googleSignInAuthentication.idToken);
+    print("ACCESS_TOKEN: " +googleSignInAuthentication.accessToken);
+
+    Credentials credentials = new Credentials(
+      secrets.cognitoIdentityPoolId,
+      secrets.cognitoUserPoolId,
+      secrets.cognitoClientId,
+      googleSignInAuthentication.idToken
+    );
+
+    final api = LoginApi(secrets.apiEndpointUrl, '/maches', secrets.region, credentials);
+
+    final result = await api.post({});
+
+    print(result.body);
+  }
+
 }

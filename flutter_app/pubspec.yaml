@@ -25,8 +25,9 @@ dependencies:
   flutter_picker: ^1.0.13
   camera: ^0.5.2+1
   path_provider: ^1.0.0
-  amazon_cognito_identity_dart: ^0.0.22
+  #amazon_cognito_identity_dart: ^0.0.22
   google_sign_in: 4.0.1+1
+  crypto: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

@@ -46,5 +46,21 @@
     <string>Can I use the mic please?</string>
     <key>NSCameraUsageDescription</key>
     <string>Can I use camera please?</string>
+    <!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+    <!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<!-- TODO Replace this value: -->
+    			<!-- Copied from GoogleServices-Info.plist key REVERSED_CLIENT_ID -->
+    			<string>com.googleusercontent.apps.656089153519-70mp719niq4vgtor1dgsb16utreg2hbg</string>
+    		</array>
+    	</dict>
+    </array>
+    <!-- End of the Google Sign-in Section -->
 </dict>
 </plist>
