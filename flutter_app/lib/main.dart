@@ -10,7 +10,7 @@ class MatchApp extends StatelessWidget {
     return MaterialApp(
         title: 'Match API',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: Colors.green.shade800
         ),
         home: Home());
   }

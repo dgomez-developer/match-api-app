@@ -139,7 +139,7 @@ class _MatchesListScreenState extends State {
       floatingActionButton: FloatingActionButton(
         onPressed: getPlayersAndPush,
         child: Icon(Icons.add),
-      ),
+        backgroundColor: Colors.green.shade800,),
     );
   }
 

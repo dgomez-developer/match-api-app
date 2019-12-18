@@ -83,7 +83,8 @@ class AddMatchScreenState extends State<AddMatchScreen> {
                 children: <Widget>[
                   Text("Score: "),
                   new Flexible(
-                      child: TextField(
+                      child: TextField(showCursor: true,
+                        autofocus: true,
                     keyboardType: TextInputType.number,
                     maxLines: 1,
                     controller: _firstPlayerScoreController,
@@ -114,7 +115,7 @@ class AddMatchScreenState extends State<AddMatchScreen> {
               children: <Widget>[
                 Text("Score: "),
                 new Flexible(
-                    child: TextField(
+                    child: TextField(showCursor: true,
                   keyboardType: TextInputType.number,
                   maxLines: 1,
                   controller: _secondPlayerScoreController,
@@ -125,7 +126,7 @@ class AddMatchScreenState extends State<AddMatchScreen> {
               padding: const EdgeInsets.only(top: 24.0),
               child: RaisedButton(elevation: 15,
                 textColor: Colors.white,
-                color: Colors.blueAccent,
+                color: Colors.green.shade800,
                 onPressed: () {
 
                   if(_firstPlayerScoreController.text.isEmpty && _secondPlayerScoreController.text.isEmpty) {

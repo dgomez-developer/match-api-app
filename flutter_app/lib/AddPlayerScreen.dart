@@ -11,19 +11,42 @@ class AddPlayerScreen extends StatefulWidget {
 
 class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
+  var _userNameTextFieldController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("Match API"),
+        title: Text("Create Player"),
       ),
-      body: Container(),
-      floatingActionButton: FloatingActionButton(
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text("user name: "),
+              new Flexible(
+                  child: TextField(showCursor: true,
+                                   autofocus: true,
+                                   keyboardType: TextInputType.number,
+                                   maxLines: 1)
+              )
+            ],
+          )
+        ]
+        ),
+
+      ),
+      floatingActionButton: FloatingActionButton(backgroundColor: Colors.green.shade800,
         onPressed: pushTakePicture,
         child: Icon(Icons.camera_alt),
       ),
     );
+  }
+
+  void execute() {
+
   }
 
   Future<Route<dynamic>> routeToCamera() async {
