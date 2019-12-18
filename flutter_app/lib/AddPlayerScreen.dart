@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:match_api_app/TakePictureScreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class AddPlayerScreen extends StatefulWidget {
   @override
@@ -11,7 +13,8 @@ class AddPlayerScreen extends StatefulWidget {
 
 class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
-  var _userNameTextFieldController = TextEditingController();
+  var _userNameTextField = TextEditingController();
+  var _emailTextField = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +30,31 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
             children: <Widget>[
               Text("user name: "),
               new Flexible(
-                  child: TextField(showCursor: true,
-                                   autofocus: true,
-                                   keyboardType: TextInputType.number,
-                                   maxLines: 1)
+                  child: TextField(showCursor: true, autofocus: true, controller: _userNameTextField)
               )
             ],
-          )
+          ),
+          Row(
+            children: <Widget>[
+              Text("email:          "),
+              new Flexible(
+                  child: TextField(showCursor: true, autofocus: false, controller: _emailTextField)
+              )
+            ],
+          ),
+        RaisedButton(elevation: 15,
+            textColor: Colors.white,
+            color: Colors.green.shade800,
+            onPressed: () {
+                 _execute();
+
+            }, child: Text("Create",
+                           style: TextStyle(fontSize: 14.0,
+                                            fontWeight: FontWeight.bold)
+                          )
+        )
         ]
         ),
-
       ),
       floatingActionButton: FloatingActionButton(backgroundColor: Colors.amber,
         onPressed: pushTakePicture,
@@ -45,8 +63,23 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
     );
   }
 
-  void execute() {
+  void _execute() {
+    if(_userNameTextField.text.isEmpty || _emailTextField.text.isEmpty) {
+      this._showToast(text: 'all fields are mandatory');
+      return;
+    }
 
+  }
+
+  void _showToast({text: String}) {
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.blueAccent,
+        textColor: Colors.white
+    );
   }
 
   Future<Route<dynamic>> routeToCamera() async {
@@ -68,5 +101,4 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
       });
     });
   }
-
 }

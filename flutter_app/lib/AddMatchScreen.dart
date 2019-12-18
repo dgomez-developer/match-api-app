@@ -166,7 +166,7 @@ class AddMatchScreenState extends State<AddMatchScreen> {
 
                 },
                 child: Text("Create",
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),),
+                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold))
               ),
             )
           ]),
