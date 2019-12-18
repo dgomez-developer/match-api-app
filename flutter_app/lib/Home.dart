@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:match_api_app/ChinesePingPongScreen.dart';
 import 'package:match_api_app/MatchesListScreen.dart';
 import 'package:match_api_app/UsersListScreen.dart';
 import 'package:match_api_app/auth/Credentials.dart';
 import 'package:match_api_app/auth/google.dart';
 
+import 'ProfileScreen.dart';
+import 'UserProfile.dart';
+import 'auth/Cognito/cognito.dart';
 import 'auth/LoginApi.dart';
 import 'auth/Secret.dart';
 
@@ -89,9 +95,31 @@ class _HomeState extends State<Home> {
 
     final api = LoginApi(secrets.apiEndpointUrl, '/maches', secrets.region, credentials);
 
-    final result = await api.post({});
+    final cognitoCredentals = await api.post({}) as CognitoCredentials;
 
-    print(result.body);
+    final parts = googleSignInAuthentication.idToken.split('.');
+    final payload = parts[1];
+    final String decoded = B64urlEncRfc7515.decodeUtf8(payload);
+    Map<String, dynamic> jwt = json.decode(decoded);
+
+    pushUserProfile(UserProfile(
+        jwt['name'],
+        jwt['email'],
+        jwt['picture'],
+        googleSignInAuthentication.idToken,
+        cognitoCredentals.sessionToken,
+        cognitoCredentals.secretAccessKey,
+        cognitoCredentals.secretAccessKey));
+  }
+
+  void pushUserProfile(UserProfile players) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => ProfileScreen(profile: players)),
+    );
   }
 
 }
