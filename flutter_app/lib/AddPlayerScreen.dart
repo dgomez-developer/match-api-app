@@ -38,7 +38,7 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
         ),
 
       ),
-      floatingActionButton: FloatingActionButton(backgroundColor: Colors.green.shade800,
+      floatingActionButton: FloatingActionButton(backgroundColor: Colors.amber,
         onPressed: pushTakePicture,
         child: Icon(Icons.camera_alt),
       ),

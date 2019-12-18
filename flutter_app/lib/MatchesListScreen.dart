@@ -6,6 +6,7 @@ import 'package:match_api_app/AddMatchScreen.dart';
 import 'package:match_api_app/MatchModel.dart';
 import 'package:match_api_app/Player.dart';
 
+
 class MatchesListScreen extends StatefulWidget {
   @override
   createState() => _MatchesListScreenState();
@@ -34,7 +35,7 @@ class _MatchesListScreenState extends State {
     super.dispose();
   }
 
-  @override
+@override
   build(context) {
     return Scaffold(
       body: RefreshIndicator(
@@ -62,75 +63,107 @@ class _MatchesListScreenState extends State {
                           alignment: Alignment.center,
                           children: <Widget>[
                             Material(
-                                elevation: 0.0,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(10.0)),
                                   child: Image.asset(
                                       "images/tennis-table-card-bg.jpg"),
                                 )),
-                            Container(
-                                //elevation: 1.0,
-                                color: Colors.transparent,
-                                child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: ListTile(
-                                        title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Image.asset("images/winner-cup.jpg",
-                                            fit: BoxFit.fitWidth,
-                                            width: match[index].player1.score >
-                                                    match[index].player2.score
-                                                ? 50
-                                                : 0,
-                                            height: match[index].player1.score >
-                                                    match[index].player2.score
-                                                ? 50
-                                                : 0),
-                                        Container(
-                                            color: Colors.transparent,
-                                            child: Column(children: <Widget>[
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    "https://i.imgur.com/BoN9kdC.png"),
-                                              ),
-                                              Text(match[index].player1.name),
-                                              Text(match[index]
-                                                  .player1
-                                                  .score
-                                                  .toString())
-                                            ])),
-                                        Container(
-                                            color: Colors.transparent,
-                                            child: Column(children: <Widget>[
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    "https://i.imgur.com/BoN9kdC.png"),
-                                              ),
-                                              Text(match[index].player2.name),
-                                              Text(match[index]
-                                                  .player2
-                                                  .score
-                                                  .toString())
-                                            ])),
-                                        Image.asset("images/winner-cup.jpg",
-                                            fit: BoxFit.fitWidth,
-                                            width: match[index].player2.score >
-                                                    match[index].player1.score
-                                                ? 50
-                                                : 0,
-                                            height: match[index].player2.score >
-                                                    match[index].player1.score
-                                                ? 50
-                                                : 0)
-                                      ],
-                                    )
-                                    )
+
+                            Positioned(
+                              child: Container(
+                                  child: CircleAvatar(
+                                    radius: 35.0,
+                                    backgroundImage: NetworkImage(
+                                        "https://i.imgur.com/BoN9kdC.png"),
+                                  ),
+
+                                  padding: const EdgeInsets.all(3.0), // borde width
+                                  decoration: new BoxDecoration(
+                                    color: Colors.redAccent, // border color
+                                    shape: BoxShape.circle,
+                                  )
+                              ),
+                              top: 15,
+                              left: 15,
+                            ),
+
+                            Positioned(
+                              child: Container(
+                                child: CircleAvatar(
+                                  radius: 35.0,
+                                  backgroundImage: NetworkImage(
+                                      "https://i.imgur.com/BoN9kdC.png"),
+                                ),
+
+                                padding: const EdgeInsets.all(3.0), // borde width
+                                decoration: new BoxDecoration(
+                                  color: Colors.redAccent, // border color
+                                  shape: BoxShape.circle,
                                 )
-                            )
-                          ],
+                              ),
+                              bottom: 15,
+                              right: 12,
+                            ),
+
+                            Positioned(
+                              top: 15,
+                              left: 70,
+                              child: Image.asset("images/winner-cup.jpg",
+                                  fit: BoxFit.fitWidth,
+                                  width: match[index].player1.score >
+                                      match[index].player2.score
+                                      ? 50
+                                      : 0,
+                                  height: match[index].player1.score >
+                                      match[index].player2.score
+                                      ? 50
+                                      : 0),
+                            ),
+
+                            Positioned(
+                              bottom: 15,
+                              right: 75,
+                              child: Image.asset("images/winner-cup.jpg",
+                                  fit: BoxFit.fitWidth,
+                                  width: match[index].player2.score >
+                                      match[index].player1.score
+                                      ? 50
+                                      : 0,
+                                  height: match[index].player2.score >
+                                      match[index].player1.score
+
+                                      ? 50
+                                      : 0),
+                            ),
+
+                            Positioned(
+                                left: 46,
+                                child: Column(children: <Widget>[
+                                  Text(match[index].player1.name,
+                                    style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.bold, letterSpacing: 0.5),),
+                                  Text(match[index]
+                                      .player1
+                                      .score
+                                      .toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),),
+                                ])
+                            ),
+
+                            Positioned(
+                              right: 60,
+                                child: Column(children: <Widget>[
+                                  Text(match[index].player2.name,
+                                    style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.bold, letterSpacing: 0.5),),
+
+                                  Text(match[index]
+                                      .player2
+                                      .score
+                                      .toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),)
+                                ])),
+                            
+                            ],
                         )
                       ])));
             },
@@ -142,6 +175,9 @@ class _MatchesListScreenState extends State {
         backgroundColor: Colors.green.shade800,),
     );
   }
+
+
+
 
   Route<dynamic> routeToCreateMatch(List<Player> players) {
     return MaterialPageRoute(builder: (BuildContext context) {
