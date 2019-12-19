@@ -46,12 +46,16 @@ class _ChinesePingPongScreenState extends State {
       body: ListView.builder(
         itemCount: players.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(players[index].name), subtitle: Text(players[index].score.toString()), trailing: IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-//                  API.addChinesePingPongPoint(users[index]);
-            },
-          ),
+          return ListTile(title: Text(players[index].name), subtitle: Text(players[index].score.toString() + "  points"),
+
+
+            trailing: Row(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.remove), onPressed: () {API.addChinesePingPongPoint(players[index]);},),
+                  IconButton(icon: Icon(Icons.add), onPressed: () {API.addChinesePingPongPoint(players[index]);},)
+                ],
+                mainAxisSize: MainAxisSize.min),
+
             leading: CircleAvatar(backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),),
           );
          /* return Row(
