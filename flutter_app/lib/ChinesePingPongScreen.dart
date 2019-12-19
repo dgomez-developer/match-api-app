@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:match_api_app/API.dart';
 import 'package:match_api_app/AddPlayerScreen.dart';
 import 'package:match_api_app/User.dart'; // Add this line.
+import 'package:match_api_app/Player.dart';
 
 class ChinesePingPongScreen extends StatefulWidget {
   @override
@@ -11,20 +12,28 @@ class ChinesePingPongScreen extends StatefulWidget {
 }
 
 class _ChinesePingPongScreenState extends State {
-  var users = new List<User>();
+  var players = new List<Player>();
 
-  _getUsers() {
+  /*_getUsers() {
     API.getUsers().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
-        users = list.map((model) => User.fromJson(model)).toList();
+        players = list.map((model) => User.fromJson(model)).toList();
+      });
+    });
+  }*/
+
+  Future<Null> _getPlayers() {
+    return API.getPlayers().then((response) {
+      setState(() {
+        players = response;
       });
     });
   }
 
   initState() {
     super.initState();
-    _getUsers();
+    _getPlayers();
   }
 
   dispose() {
@@ -35,15 +44,16 @@ class _ChinesePingPongScreenState extends State {
   build(context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: players.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(users[index].name), trailing: IconButton(
+          return ListTile(title: Text(players[index].name), subtitle: Text(players[index].score.toString()), trailing: IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
 //                  API.addChinesePingPongPoint(users[index]);
             },
           ),
-            leading: CircleAvatar(backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),),);
+            leading: CircleAvatar(backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),),
+          );
          /* return Row(
             children: <Widget>[
               CircleAvatar(

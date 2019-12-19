@@ -14,7 +14,7 @@ import 'auth/Cognito/sig_v4.dart';
 
 
 const baseUrl = "https://jsonplaceholder.typicode.com";
-const localhostUrl = "http://localhost:5000";
+const localhostUrl = "http://localhost:8080";
 
 class API {
   static Future getUsers() {

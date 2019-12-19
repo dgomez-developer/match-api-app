@@ -50,21 +50,23 @@ class _MatchesListScreenState extends State {
               backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"))));
 
   Widget _player1Cup({index: int}) {
-    return Positioned(top: 15, left: 70,
-                      child: Image.asset("images/winner-cup.jpg",
+    return Positioned(top: 4, left: 65,
+
+                      child: Image.asset("images/giphy2.gif",
+                      //child: Image.asset("images/winner-cup.jpg",
                       fit: BoxFit.fitWidth,
-                      width: match[index].player1.score > match[index].player2.score ? 50 : 0,
-                      height: match[index].player1.score > match[index].player2.score ? 50 : 0)
+                      width: match[index].player1.score > match[index].player2.score ? 80 : 0,
+                      height: match[index].player1.score > match[index].player2.score ? 80 : 0)
     );
   }
 
   Widget _player2Cup({index: int}) {
-    return Positioned(bottom: 15,
-                      right: 75,
-                      child: Image.asset("images/winner-cup.jpg",
+    return Positioned(bottom: 7,
+                      right: 73,
+                      child: Image.asset("images/giphy2.gif",
                        fit: BoxFit.fitWidth,
-                       width: match[index].player2.score > match[index].player1.score ? 50 : 0,
-                       height: match[index].player2.score > match[index].player1.score ? 50 : 0)
+                       width: match[index].player2.score > match[index].player1.score ? 80 : 0,
+                       height: match[index].player2.score > match[index].player1.score ? 80 : 0)
     );
   }
 

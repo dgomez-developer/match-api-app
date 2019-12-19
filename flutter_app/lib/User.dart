@@ -18,3 +18,18 @@ class User {
     return {'id': id, 'name': name, 'email': email};
   }
 }
+
+/*class Player {
+
+  Player({this.id, this.name, this.score});
+
+  factory Player.fromJson(Map<String, dynamic> json) {
+   return Player(id : json['id'],
+    name : json['name'],
+    score : json['score']);
+  }
+
+  Map toJson() {
+    return {'name': name, 'score' : score};
+  }
+}*/
