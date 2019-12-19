@@ -6,6 +6,7 @@ import 'package:match_api_app/AddMatchScreen.dart';
 import 'package:match_api_app/MatchModel.dart';
 import 'package:match_api_app/Player.dart';
 
+
 class MatchesListScreen extends StatefulWidget {
   @override
   createState() => _MatchesListScreenState();
@@ -34,106 +35,106 @@ class _MatchesListScreenState extends State {
     super.dispose();
   }
 
+  Widget _avatar = Positioned(top: 15.0,
+      left: 15.0,
+      child: Container(padding: const EdgeInsets.all(3.0),
+          decoration: new BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+          child: CircleAvatar(radius: 35.0,
+              backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"))));
+
+  Widget _avatar2 = Positioned(bottom: 15.0,
+      right: 15.0,
+      child: Container(padding: const EdgeInsets.all(3.0),
+          decoration: new BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle),
+          child: CircleAvatar(radius: 35.0,
+              backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"))));
+
+  Widget _player1Cup({index: int}) {
+    return Positioned(top: 15, left: 70,
+                      child: Image.asset("images/winner-cup.jpg",
+                      fit: BoxFit.fitWidth,
+                      width: match[index].player1.score > match[index].player2.score ? 50 : 0,
+                      height: match[index].player1.score > match[index].player2.score ? 50 : 0)
+    );
+  }
+
+  Widget _player2Cup({index: int}) {
+    return Positioned(bottom: 15,
+                      right: 75,
+                      child: Image.asset("images/winner-cup.jpg",
+                       fit: BoxFit.fitWidth,
+                       width: match[index].player2.score > match[index].player1.score ? 50 : 0,
+                       height: match[index].player2.score > match[index].player1.score ? 50 : 0)
+    );
+  }
+
+  Widget _player1Data({index: int}) {
+    return Positioned(
+        left: 46,
+        child: Column(children: <Widget>[
+          Text(match[index].player1.name,
+              style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+          Text(match[index].player1.score.toString(),
+              style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold))
+        ])
+    );
+}
+
+  Widget _player2Data({index: int}) {
+    return Positioned(
+        right: 60,
+        child: Column(children: <Widget>[
+          Text(match[index].player2.name,
+              style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+
+          Text(match[index].player2.score.toString(),
+              style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold))
+        ]));
+  }
+
+  Widget _createCard({ index: int }) {
+    return Card(borderOnForeground: false,
+        elevation: 5,
+        child: Column(mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Stack(alignment: Alignment.center,
+                children: <Widget>[
+                  Material(elevation: 0.0,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+                          child: Image.asset("images/tennis-table-card-bg.jpg"))),
+                  _avatar,
+                  _avatar2,
+                  _player1Cup(index: index),
+                  _player2Cup(index: index),
+                  _player1Data(index: index),
+                  _player2Data(index: index)
+                ],
+              )]));
+  }
+
+  void _onSwipeLeft({ index: int }) {
+    API.deleteMatch(match[index].id).then((dynamic) {
+      setState(() {
+        match.removeAt(index);
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text("Deleted")));
+      });
+    });
+  }
+
   @override
   build(context) {
     return Scaffold(
       body: RefreshIndicator(
           key: _refreshIndicatorKey,
-          child: ListView.builder(
-            itemCount: match.length,
-            itemBuilder: (context, index) {
-              return Dismissible(
-                  key: Key(match[index].id),
-                  onDismissed: (direction) {
-                    API.deleteMatch(match[index].id).then((dynamic) {
-                      setState(() {
-                        match.removeAt(index);
-                        Scaffold.of(context)
-                            .showSnackBar(SnackBar(content: Text("Deleted")));
-                      });
-                    });
-                  },
-                  child: Card(
-                      borderOnForeground: false,
-                      elevation: 5,
-                      child: Column(mainAxisSize: MainAxisSize.min, children: <
-                          Widget>[
-                        Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            Material(
-                                elevation: 0.0,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10.0)),
-                                  child: Image.asset(
-                                      "images/tennis-table-card-bg.jpg"),
-                                )),
-                            Container(
-                                //elevation: 1.0,
-                                color: Colors.transparent,
-                                child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: ListTile(
-                                        title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Image.asset("images/winner-cup.jpg",
-                                            fit: BoxFit.fitWidth,
-                                            width: match[index].player1.score >
-                                                    match[index].player2.score
-                                                ? 50
-                                                : 0,
-                                            height: match[index].player1.score >
-                                                    match[index].player2.score
-                                                ? 50
-                                                : 0),
-                                        Container(
-                                            color: Colors.transparent,
-                                            child: Column(children: <Widget>[
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    "https://i.imgur.com/BoN9kdC.png"),
-                                              ),
-                                              Text(match[index].player1.name),
-                                              Text(match[index]
-                                                  .player1
-                                                  .score
-                                                  .toString())
-                                            ])),
-                                        Container(
-                                            color: Colors.transparent,
-                                            child: Column(children: <Widget>[
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    "https://i.imgur.com/BoN9kdC.png"),
-                                              ),
-                                              Text(match[index].player2.name),
-                                              Text(match[index]
-                                                  .player2
-                                                  .score
-                                                  .toString())
-                                            ])),
-                                        Image.asset("images/winner-cup.jpg",
-                                            fit: BoxFit.fitWidth,
-                                            width: match[index].player2.score >
-                                                    match[index].player1.score
-                                                ? 50
-                                                : 0,
-                                            height: match[index].player2.score >
-                                                    match[index].player1.score
-                                                ? 50
-                                                : 0)
-                                      ],
-                                    )
-                                    )
-                                )
-                            )
-                          ],
-                        )
-                      ])));
-            },
+          child: ListView.builder(itemCount: match.length,
+              itemBuilder: (context, index) {
+                return Dismissible(key: Key(match[index].id),
+                    onDismissed: (direction) { _onSwipeLeft(index: index);},
+                    child: _createCard(index: index)
+                );
+              }
           ),
           onRefresh: _getMatches),
       floatingActionButton: FloatingActionButton(
@@ -142,6 +143,7 @@ class _MatchesListScreenState extends State {
         backgroundColor: Colors.green.shade800,),
     );
   }
+
 
   Route<dynamic> routeToCreateMatch(List<Player> players) {
     return MaterialPageRoute(builder: (BuildContext context) {

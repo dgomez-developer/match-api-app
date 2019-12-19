@@ -45,7 +45,7 @@ class _UsersListScreenState extends State {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(backgroundColor: Colors.green.shade800,
         onPressed: pushCreateUser,
         child: Icon(Icons.add),
       ),

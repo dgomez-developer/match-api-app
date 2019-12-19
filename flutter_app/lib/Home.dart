@@ -44,7 +44,8 @@ class _HomeState extends State<Home> {
   Scaffold createBottomBar() {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Match App"),
+        //title: Text("Match App"),
+        title: Image.asset('images/logo3.jpg', fit: BoxFit.cover),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.perm_identity),
