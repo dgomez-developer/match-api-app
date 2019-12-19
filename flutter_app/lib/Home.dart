@@ -1,16 +1,12 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:match_api_app/ChinesePingPongScreen.dart';
 import 'package:match_api_app/MatchesListScreen.dart';
 import 'package:match_api_app/UsersListScreen.dart';
 import 'package:match_api_app/auth/Credentials.dart';
-import 'package:match_api_app/auth/google.dart';
 
 import 'ProfileScreen.dart';
 import 'UserProfile.dart';
-import 'auth/Cognito/cognito.dart';
 import 'auth/LoginApi.dart';
 import 'auth/Secret.dart';
 import 'package:openid_client/openid_client_io.dart';
@@ -101,6 +97,8 @@ class _HomeState extends State<Home> {
     scopes.add("profile");
     scopes.add("email");
     scopes.add("openid");
+    scopes.add("com.pingpongtournaments.matches/read");
+//    scopes.add("com.pingpongtournaments.matches/write");
 
     var userInfo = await api.authenticate(
         new Uri.https(

@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:match_api_app/Player.dart';
 import 'package:match_api_app/TakePictureScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:match_api_app/API.dart';
 
 class AddPlayerScreen extends StatefulWidget {
   @override
@@ -18,7 +20,6 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text("Create Player"),
@@ -66,6 +67,8 @@ class _AddPlayerScreenState extends State<AddPlayerScreen> {
   void _execute() {
     if(_userNameTextField.text.isEmpty || _emailTextField.text.isEmpty) {
       this._showToast(text: 'all fields are mandatory');
+      var result = API.createPlayer(new Player("", _userNameTextField.text.trim(), 0));
+      _showToast(text : "User Created");
       return;
     }
 

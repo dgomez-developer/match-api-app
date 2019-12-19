@@ -4,12 +4,16 @@ class Player {
   String name;
   int score;
 
-  Player({this.id, this.name, this.score});
+  Player(String id, String name, int score){
+    this.id = id;
+    this.name = name;
+    this.score = score;
+  }
 
   factory Player.fromJson(Map<String, dynamic> json) {
-   return Player(id : json['id'],
-    name : json['name'],
-    score : json['score']);
+   return new Player(json['id'],
+       json['name'],
+       json['score']);
   }
 
   Map toJson() {

@@ -16,8 +16,7 @@ class _ChinesePingPongScreenState extends State {
   _getUsers() {
     API.getUsers().then((response) {
       setState(() {
-        Iterable list = json.decode(response.body);
-        users = list.map((model) => User.fromJson(model)).toList();
+        users = response;
       });
     });
   }

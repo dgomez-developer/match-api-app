@@ -1,26 +1,32 @@
-
-
-import 'package:match_api_app/auth/Credentials.dart';
 import 'package:http/http.dart' as http;
-
-import 'Cognito/src/cognito_credentials.dart';
-import 'Cognito/sig_v4.dart';
-
-// import the io version
+import 'package:match_api_app/auth/Credentials.dart';
 import 'package:openid_client/openid_client_io.dart';
-// use url launcher package
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginApi {
-  final String endpoint;
-  final String path;
-  final String region;
-  final Credentials credentials;
+import '../storage/AppStorage.dart';
+import 'Cognito/sig_v4.dart';
+import 'Cognito/src/cognito_credentials.dart';
+import 'Credentials.dart';
 
-  LoginApi(this.endpoint, this.path, this.region, this.credentials);
+class LoginApi {
+  String endpoint;
+  String path;
+  String region;
+  Credentials credentials;
+  AppStorage storage;
+
+  LoginApi(
+      String endpoint, String path, String region, Credentials credentials) {
+    this.endpoint = endpoint;
+    this.path = path;
+    this.region = region;
+    this.credentials = credentials;
+    this.storage = new AppStorage();
+  }
 
   post(Map body) async {
-    CognitoCredentials cognitoCredentials = (await credentials.cognitoCredentials) as CognitoCredentials;
+    CognitoCredentials cognitoCredentials =
+        (await credentials.cognitoCredentials) as CognitoCredentials;
     final awsSigV4Client = new AwsSigV4Client(
       cognitoCredentials.accessKeyId,
       cognitoCredentials.secretAccessKey,
@@ -39,16 +45,16 @@ class LoginApi {
 
     http.Response response;
 
-    response = await http.get(signedRequest.url, headers: signedRequest.headers);
+    response =
+        await http.get(signedRequest.url, headers: signedRequest.headers);
     print(response.headers.toString());
     print(response.statusCode);
     print(response.body);
     return cognitoCredentials;
   }
 
-
-  authenticate(Uri uri, String clientId, String clientSecret, List<String> scopes) async {
-
+  authenticate(Uri uri, String clientId, String clientSecret,
+      List<String> scopes) async {
     // create the client
     var issuer = await Issuer.discover(uri);
     var client = new Client(issuer, clientId, clientSecret);
@@ -65,7 +71,9 @@ class LoginApi {
     // create an authenticator
     var authenticator = new Authenticator(client,
         scopes: scopes,
-        port: 4000, urlLancher: urlLauncher, redirectUri: Uri.parse("http://localhost:4000/"));
+        port: 4000,
+        urlLancher: urlLauncher,
+        redirectUri: Uri.parse("http://localhost:4000/"));
 
     // starts the authentication
     var c = await authenticator.authorize();
@@ -73,13 +81,11 @@ class LoginApi {
     // close the webview when finished
     closeWebView();
 
-    print(c.idToken.toString());
+    print(c.idToken);
+    
+//    await storage.storeToken(authenticator.)
 
     // return the user info
     return await c.getUserInfo();
-
   }
-
-
-
 }

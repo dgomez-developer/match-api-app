@@ -14,20 +14,37 @@ import 'auth/Cognito/sig_v4.dart';
 
 
 const baseUrl = "https://jsonplaceholder.typicode.com";
-const localhostUrl = "http://localhost:5000";
+const localhostUrl = "http://10.0.2.2:5000";
+//const localhostUrl = "http://localhost:5000";
 
 class API {
-  static Future getUsers() {
-    var url = baseUrl + "/users";
-    return http.get(url);
+  static Future<List<User>> getUsers() async {
+    var url = localhostUrl + "/players";
+    var response = await http.get(url);
+    Iterable list = json.decode(response.body);
+    return list.map((model) => User.fromJson(model)).toList();
   }
 
   static Future<List<Player>> getPlayers() async {
-    var url = baseUrl + "/users";
+    var url = baseUrl + "/players";
     var response = await http.get(url);
     Iterable list = json.decode(response.body);
-    var users = list.map((model) => User.fromJson(model)).toList();
-    return users.map((user) => Player(id:user.id.toString(), name:user.name)).toList();
+    return list.map((model) => Player.fromJson(model)).toList();
+  }
+
+  static Future<Player> createPlayer(Player player) async {
+    var url = baseUrl + "/player";
+    //encode Map to JSON
+    var body = json.encode(player.toJson());
+
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: body
+    );
+    print("${response.statusCode}");
+    print("${response.body}");
+    var responsebody = json.decode(response.body);
+    return Player.fromJson(responsebody);
   }
 
   static Future getMatches() {
@@ -101,7 +118,7 @@ class API {
   }
 
   static Future addChinesePingPongPoint(Player player) async {
-    var url = localhostUrl + "/ranking/" + player.id;
+    var url = localhostUrl + "/player/" + player.id;
     var body = json.encode(player);
     return http.put(url,body: body,headers: {"Content-Type": "application/json"});
   }
