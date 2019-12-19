@@ -30,6 +30,9 @@ dependencies:
   crypto: ^2.0.2+1
   fluttertoast: ^3.1.0
   jaguar_jwt: ^2.1.6
+  openid_client: ^0.2.4
+  url_launcher: ^5.4.1
+  flutter_secure_storage: ^3.3.1+1
 
 dev_dependencies:
   flutter_test:

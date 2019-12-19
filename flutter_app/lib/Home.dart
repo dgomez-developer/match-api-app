@@ -13,6 +13,7 @@ import 'UserProfile.dart';
 import 'auth/Cognito/cognito.dart';
 import 'auth/LoginApi.dart';
 import 'auth/Secret.dart';
+import 'package:openid_client/openid_client_io.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -22,7 +23,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   int _currentIndex = 0;
   final List<Widget> _children = [
     MatchesListScreen(),
@@ -35,15 +35,13 @@ class _HomeState extends State<Home> {
     return createBottomBar();
   }
 
-
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 
-  Scaffold createBottomBar(){
-
+  Scaffold createBottomBar() {
     return Scaffold(
       appBar: AppBar(
         title: Text("Match App"),
@@ -69,47 +67,61 @@ class _HomeState extends State<Home> {
             title: Text('Players'),
           ),
           new BottomNavigationBarItem(
-              icon: Icon(Icons.stars),
-              title: Text('Ranking')
-          )
+              icon: Icon(Icons.stars), title: Text('Ranking'))
         ],
       ),
     );
   }
 
   doLogin() async {
-
     var secretLoader = SecretLoader(secretPath: "auth/secrets.json");
     var secrets = await secretLoader.load();
-    final googleSignInAuthentication = await signInWithGoogle();
-
-    print("ID_TOKEN: " + googleSignInAuthentication.idToken);
-    print("ACCESS_TOKEN: " +googleSignInAuthentication.accessToken);
+//    final googleSignInAuthentication = await signInWithGoogle();
+//
+//    print("ID_TOKEN: " + googleSignInAuthentication.idToken);
+//    print("ACCESS_TOKEN: " + googleSignInAuthentication.accessToken);
+//
+//    Credentials credentials = new Credentials(
+//        secrets.cognitoIdentityPoolId,
+//        secrets.cognitoUserPoolId,
+//        secrets.cognitoClientId,
+//        googleSignInAuthentication.idToken);
 
     Credentials credentials = new Credentials(
-      secrets.cognitoIdentityPoolId,
-      secrets.cognitoUserPoolId,
-      secrets.cognitoClientId,
-      googleSignInAuthentication.idToken
-    );
+        secrets.cognitoIdentityPoolId,
+        secrets.cognitoUserPoolId,
+        secrets.cognitoClientId,
+        "");
 
-    final api = LoginApi(secrets.apiEndpointUrl, '/maches', secrets.region, credentials);
+    final api = LoginApi(
+        secrets.apiEndpointUrl, '/maches', secrets.region, credentials);
 
-    final cognitoCredentals = await api.post({}) as CognitoCredentials;
+    List<String> scopes = new List();
+    scopes.add("profile");
+    scopes.add("email");
+    scopes.add("openid");
 
-    final parts = googleSignInAuthentication.idToken.split('.');
-    final payload = parts[1];
-    final String decoded = B64urlEncRfc7515.decodeUtf8(payload);
-    Map<String, dynamic> jwt = json.decode(decoded);
+    var userInfo = await api.authenticate(
+        new Uri.https(
+            secrets.discoveryDocumentBaseUrl, secrets.discoveryDocumentPath),
+        secrets.cognitoClientId, secrets.cognitoClientSecret,
+        scopes) as UserInfo;
+
+    print(userInfo.email);
+    print(userInfo.name);
+    print(userInfo.picture);
+
+//    final cognitoCredentals = await api.post({}) as CognitoCredentials;
+//
+//    final parts = googleSignInAuthentication.idToken.split('.');
+//    final payload = parts[1];
+//    final String decoded = B64urlEncRfc7515.decodeUtf8(payload);
+//    Map<String, dynamic> jwt = json.decode(decoded);
 
     pushUserProfile(UserProfile(
-        jwt['name'],
-        jwt['email'],
-        jwt['picture'],
-        googleSignInAuthentication.idToken,
-        cognitoCredentals.sessionToken,
-        cognitoCredentals.secretAccessKey,
-        cognitoCredentals.secretAccessKey));
+        userInfo.name,
+        userInfo.email,
+        userInfo.picture.toString(),""));
   }
 
   void pushUserProfile(UserProfile players) async {
@@ -121,5 +133,4 @@ class _HomeState extends State<Home> {
       MaterialPageRoute(builder: (context) => ProfileScreen(profile: players)),
     );
   }
-
 }

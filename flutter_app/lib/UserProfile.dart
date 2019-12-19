@@ -11,10 +11,7 @@ class UserProfile {
   UserProfile(String name,
       String email,
       String imageUrl,
-      String googleToken,
-      String cognitoSessionToken,
-      String cognitoAccessKey,
-      String cognitoAccessId) {
+      String googleToken) {
     this.name = name;
     this.email = email;
     this.imageUrl = imageUrl;

@@ -6,6 +6,11 @@ import 'package:http/http.dart' as http;
 import 'Cognito/src/cognito_credentials.dart';
 import 'Cognito/sig_v4.dart';
 
+// import the io version
+import 'package:openid_client/openid_client_io.dart';
+// use url launcher package
+import 'package:url_launcher/url_launcher.dart';
+
 class LoginApi {
   final String endpoint;
   final String path;
@@ -40,4 +45,41 @@ class LoginApi {
     print(response.body);
     return cognitoCredentials;
   }
+
+
+  authenticate(Uri uri, String clientId, String clientSecret, List<String> scopes) async {
+
+    // create the client
+    var issuer = await Issuer.discover(uri);
+    var client = new Client(issuer, clientId, clientSecret);
+
+    // create a function to open a browser with an url
+    urlLauncher(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    // create an authenticator
+    var authenticator = new Authenticator(client,
+        scopes: scopes,
+        port: 4000, urlLancher: urlLauncher, redirectUri: Uri.parse("http://localhost:4000/"));
+
+    // starts the authentication
+    var c = await authenticator.authorize();
+
+    // close the webview when finished
+    closeWebView();
+
+    print(c.idToken.toString());
+
+    // return the user info
+    return await c.getUserInfo();
+
+  }
+
+
+
 }

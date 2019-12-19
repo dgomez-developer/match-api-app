@@ -11,18 +11,23 @@ class Secret {
   final String cognitoIdentityPoolId;
   final String cognitoUserPoolId;
   final String cognitoClientId;
+  final String cognitoClientSecret;
+  final String discoveryDocumentPath;
+  final String discoveryDocumentBaseUrl;
   final String apiEndpointUrl;
 
-  Secret(
-      {this.s3Bucket = "",
-      this.accessKey = "",
-      this.region = "",
-      this.s3Endpoint = "",
-      this.secretKey = "",
-      this.cognitoIdentityPoolId = "",
-      this.cognitoUserPoolId = "",
-      this.cognitoClientId = "",
-      this.apiEndpointUrl = ""});
+  Secret({this.s3Bucket = "",
+    this.accessKey = "",
+    this.region = "",
+    this.s3Endpoint = "",
+    this.secretKey = "",
+    this.cognitoIdentityPoolId = "",
+    this.cognitoUserPoolId = "",
+    this.cognitoClientId = "",
+    this.cognitoClientSecret = "",
+    this.discoveryDocumentBaseUrl = "",
+    this.discoveryDocumentPath = "",
+    this.apiEndpointUrl = ""});
 
   factory Secret.fromJson(Map<String, dynamic> jsonMap) {
     return new Secret(
@@ -34,6 +39,9 @@ class Secret {
         cognitoIdentityPoolId: jsonMap["cognitoIdentityPoolId"],
         cognitoUserPoolId: jsonMap["cognitoUserPoolId"],
         cognitoClientId: jsonMap["cognitoClientId"],
+        cognitoClientSecret: jsonMap["cognitoClientSecret"],
+        discoveryDocumentBaseUrl: jsonMap["discoveryDocumentBaseUrl"],
+        discoveryDocumentPath: jsonMap["discoveryDocumentPath"],
         apiEndpointUrl: jsonMap["apiEndpointUrl"]);
   }
 }
@@ -45,9 +53,9 @@ class SecretLoader {
 
   Future<Secret> load() {
     return rootBundle.loadStructuredData<Secret>(this.secretPath,
-        (jsonStr) async {
-      final secret = Secret.fromJson(json.decode(jsonStr));
-      return secret;
-    });
+            (jsonStr) async {
+          final secret = Secret.fromJson(json.decode(jsonStr));
+          return secret;
+        });
   }
 }
